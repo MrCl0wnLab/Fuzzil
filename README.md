@@ -6,8 +6,8 @@
 
 ### DESCRIPTION
 ```
-The Fuzzil is a program which injects automatically semi-random
-data into a program and detect potential bugs.
+The Fuzzil is a program which injects automatically data into a 
+webpage and detect potential bugs.
 ```
 
 ```
