@@ -14,6 +14,13 @@ ob_implicit_flush(1);
 
 
 /*
+
+By: MrCl0wnLab
+My blog: http://blog.mrcl0wn.com/
+GitHub: https://github.com/MrCl0wnLab
+Twitter: https://twitter.com/MrCl0wnLab
+
+
     MODIFICAR O ARQUIVO  PHP-FPM ]
         apt-get install php7.2-fpm
         sudo vim /etc/php-fpm.conf
@@ -61,6 +68,7 @@ $msg_err = $banner."
      TARGET                  -t target.com.br/FUZZ  
      ARQUIVO SOURCE FUZZ     -f strings.txt 
      THREADS                 --thr 15
+     RANGE                   --range 1-200
      GREP                    --grep 
      HELP                    --help / -h
 
@@ -69,6 +77,14 @@ $msg_err = $banner."
                                302.log,401.log,
                                402.log,403.log,
                                grep.log
+[!] [EXAMPLE]
+     php fuzzil.php  -t http://www3.ILUSTRATIVO.gov.br/FUZZ -f 0day.txt --grep 'Admin - Autentica'
+     php fuzzil.php  -t http://FUZZ.ILUSTRATIVO.gov.br/Sistema/Login.aspx -f sub.txt --grep 'Admin - Autentica'
+     php fuzzil.php  -t 'http://FUZZ.ILUSTRATIVO.gov.br/Sistema/Login.aspx?login=1%27' -f sub.txt --grep 'SQL syntax;'
+     php fuzzil.php  -t 'http://FUZZ.ILUSTRATIVO.gov.br/admin.FUZZ' -f ext.txt'
+     php fuzzil.php  -t http://wwwFUZZ.ILUSTRATIVO.gov.br  --range 1-100
+     php fuzzil.php  -f hots_check_status_code.txt
+                                    
 \n\n";
 
 
@@ -84,13 +100,10 @@ $_SESSION['grep_op'] = isset($op['grep']) ?
 $thread_op = isset($op['thr']) ? 
         $op['thr'] : 1;
 
-
 if(isset($op['f'])){
     $file_op =  $op['f'];
     $arrytarget = (array)__open_targets($file_op); 
 }
-
-print_r($arrytarget);
 
  if(isset($op['range'])){
     $_ = explode('-', $op['range']);
@@ -105,9 +118,6 @@ $_SESSION['tEND'] = $thread_op;
 $_SESSION['tTIME'] = ($_SESSION['tEND']/10);
 $_SESSION['TMP'] = NULL;
 
-#$arrytarget = (array)__open_targets($file_op);
-
-#echo system("clear").$banner;
 echo $banner;
 
 __exec($arrytarget,$target_op);
@@ -236,8 +246,8 @@ function __request($url){
                     $id     = key($value);
                     $cor    = __colorCode($url['http_code']);
                     $title  = __page_title($value['content']);
-                    $grep   = __grep($_SESSION['grep_op'],$value['content']);
-      
+                    $grep   = __grep($_SESSION['grep_op'],$value['content'])[0];
+
                     __saveValue($url['url'],$url['http_code']);
 
                     if(isset($grep))
@@ -387,7 +397,7 @@ function __getUserAgentRandom() {
 
 function __grep($regex,$value){
 
-    preg_match_all($regex, $value,$ret);
+    preg_match_all("/{$regex}/", $value,$ret);
 	return $ret[0];
 
 }
