@@ -30,12 +30,19 @@ data into a program and detect potential bugs.
 ```
 ### HELP
 ```
+    ███████╗██╗   ██╗███████╗███████╗██╗██╗     
+    ██╔════╝██║   ██║╚══███╔╝╚══███╔╝██║██║     
+    █████╗  ██║   ██║  ███╔╝   ███╔╝ ██║██║     
+    ██╔══╝  ██║   ██║ ███╔╝   ███╔╝  ██║██║     
+    ██║     ╚██████╔╝███████╗███████╗██║███████╗
+    ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚═╝╚══════╝
 [!] [HELP]
 
      Defina o comando 
      TARGET                  -t target.com.br/FUZZ  
      ARQUIVO SOURCE FUZZ     -f strings.txt 
      THREADS                 --thr 15
+     RANGE                   --range 1-200
      GREP                    --grep 
      HELP                    --help / -h
 
@@ -46,6 +53,15 @@ data into a program and detect potential bugs.
                                grep.log
 ```
 
+### USE
+```
+php fuzzil.php  -t http://www3.ILUSTRATIVO.gov.br/FUZZ -f 0day.txt --grep 'Admin - Autentica'
+php fuzzil.php  -t http://FUZZ.ILUSTRATIVO.gov.br/Sistema/Login.aspx -f sub.txt --grep 'Admin - Autentica'
+php fuzzil.php  -t 'http://FUZZ.ILUSTRATIVO.gov.br/Sistema/Login.aspx?login=1%27' -f sub.txt --grep 'SQL syntax;'
+php fuzzil.php  -t 'http://FUZZ.ILUSTRATIVO.gov.br/admin.FUZZ' -f ext.txt'
+php fuzzil.php  -t http://wwwFUZZ.ILUSTRATIVO.gov.br  --range 1-100
+php fuzzil.php  -f hots_check_status_code.txt
+```
 ### TUNNING ( GAMBIARRA )
 ```
 MODIFICAR O ARQUIVO  PHP-FPM:
